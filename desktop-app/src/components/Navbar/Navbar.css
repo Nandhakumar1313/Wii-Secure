@@ -1,0 +1,40 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-left {
+    display: flex;
+    font-size: 1.5rem;
+    align-items: center;
+    cursor: pointer;
+}
+
+.nav-logo {
+    height: 3rem;
+    padding-right: 2px;
+}
+
+.nav-right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-right>* {
+    padding: 15px;
+}
+
+.nav-r-ele {
+    text-decoration: none;
+    color: rgb(179, 179, 179);
+    font-weight: 500;
+    transition: ease-in 0.1s;
+
+}
+
+.nav-r-ele:hover {
+
+    color: #4b6e8b;
+}
