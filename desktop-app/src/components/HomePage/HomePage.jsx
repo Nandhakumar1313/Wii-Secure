@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import './HomePage.css'
 
 function HomePage() {
   const [ipdetails,setIpdetails] = useState()
@@ -27,6 +28,8 @@ function HomePage() {
         <h2 className="ip-region">{ipdetails.region}</h2>
         <h2 className="country">{ipdetails.country}</h2>
       </div>):(<></>)}
+
+      
       
     </div>
   )
