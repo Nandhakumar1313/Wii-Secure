@@ -1,11 +1,11 @@
 import React from 'react'
 
-function HomePage() {
+function Firewall() {
   return (
     <div className="content-container">
-      HomePage
+        Firewall
     </div>
   )
 }
 
-export default HomePage
+export default Firewall

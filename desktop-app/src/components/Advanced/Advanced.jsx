@@ -1,11 +1,11 @@
 import React from 'react'
 
-function HomePage() {
+function Advanced() {
   return (
     <div className="content-container">
-      HomePage
+        Advanced
     </div>
   )
 }
 
-export default HomePage
+export default Advanced

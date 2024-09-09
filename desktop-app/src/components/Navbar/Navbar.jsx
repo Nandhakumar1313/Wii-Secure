@@ -14,9 +14,9 @@ function Navbar() {
                 <h2 className="nav-title">WiiSecure</h2>
             </div>
             <div className="nav-right">
-                <Link className ="nav-r-ele" to="#">Settings</Link>
-                <Link className ="nav-r-ele" to="#">Firewall</Link>
-                <Link className ="nav-r-ele" to="#">Advanced</Link>
+                <Link className ="nav-r-ele" to="/settings">Settings</Link>
+                <Link className ="nav-r-ele" to="/firewall">Firewall</Link>
+                <Link className ="nav-r-ele" to="/advanced">Advanced</Link>
                  
             </div>
         </div>

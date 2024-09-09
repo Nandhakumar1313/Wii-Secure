@@ -1,8 +1,8 @@
 
 
-const isAuthenticated = () => {
-    const token = true
-    return !!token
+
+function isAuthenticated() {
+    return false
 }
 
-export default isAuthenticated
+export default isAuthenticated 
