@@ -69,7 +69,7 @@ ipcMain.on('vpn-control', (event, action) => {
 
 })
 
-ipcMain.on('send-from-renderer', (event))
+
 
 app.whenReady().then(createWindow)
 
