@@ -59,28 +59,50 @@ function createWindow() {
         },
     });
 
+    console.log(`Loading preload script: ${path.join(__dirname, 'preload.cjs')}`);
+
+    mainWindow.webContents.on('preload-error', (event, preloadPath, error) => {
+        console.error(`Error loading preload script: ${error.message}`);
+    });
+
     if (app.isPackaged) {
         const indexPath = path.join(__dirname, '..', '..', 'dist', 'index.html');
-        mainWindow.loadFile(indexPath);
+        console.log(`Loading production HTML from: ${indexPath}`); // Log the path
+        mainWindow.loadFile(indexPath)
+            .catch(err => console.error(`Error loading file: ${err.message}`)); // Catch load errors
     } else {
-        mainWindow.loadURL('http://localhost:5173');
+        console.log('Loading development server at http://localhost:5173');
+        mainWindow.loadURL('http://localhost:5173')
+            .catch(err => console.error(`Error loading URL: ${err.message}`)); // Catch load errors
     }
+
+    ainWindow.webContents.on('did-finish-load', () => {
+        console.log('Main window content fully loaded');
+    });
+
+    // Log if there are any issues during loading
+    mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+        console.error(`Failed to load: ${errorDescription} (Error Code: ${errorCode})`);
+    });
 
 }
 
 ipcMain.on('reload-app', (event) => {
+    console.log('Received reload-app event');
     mainWindow.reload(); // This will reload the React app
 });
 
 ipcMain.on('vpn-control', (event, action) => {
-    if (action === 'start') {
-        startVPN()
-    }
-    else if (action === 'stop') {
-        stopVPN();
-    }
+    console.log(`Received vpn-control event with action: ${action}`);
 
-})
+    if (action === 'start') {
+        startVPN();
+    } else if (action === 'stop') {
+        stopVPN();
+    } else {
+        console.error(`Unknown action: ${action}`);
+    }
+});
 
 
 
