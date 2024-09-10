@@ -1,5 +1,5 @@
 // src/main/main.js
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, Notification } = require('electron')
 
 const path = require('path');
 const sudo = require('sudo-prompt');
@@ -8,8 +8,9 @@ const { exec } = require('child_process');
 let mainwindow
 function startVPN() {
     console.log("starting")
+
     const openvpnBinary = path.join(__dirname, '..', '..', 'openvpn', 'win32', 'openvpn.exe');
-    const configFilePath = path.join(__dirname, '..', '..', 'openvpn', 'vpn_config', 'config.ovpn');
+    const configFilePath = path.join(__dirname, '..', '..', 'openvpn', 'vpn_config', 'config-user234.ovpn');
     const command = `"${openvpnBinary}" --config "${configFilePath}"`;
 
     sudo.exec(command, { name: 'OpenVPN Connection' }, (error, stdout, stderr) => {
@@ -47,9 +48,16 @@ function createWindow() {
             nodeIntegration: false,
         },
     });
+
+
+
     mainWindow.loadURL('http://localhost:5173');
+
 }
 
+ipcMain.on('reload-app', (event) => {
+    mainWindow.reload(); // This will reload the React app
+});
 
 ipcMain.on('vpn-control', (event, action) => {
     if (action === 'start') {
@@ -61,7 +69,9 @@ ipcMain.on('vpn-control', (event, action) => {
 
 })
 
-app.whenReady().then(createWindow);
+ipcMain.on('send-from-renderer', (event))
+
+app.whenReady().then(createWindow)
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {

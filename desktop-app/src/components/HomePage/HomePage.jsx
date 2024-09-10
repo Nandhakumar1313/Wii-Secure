@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './HomePage.css';
 
+
 function HomePage() {
   const [ipdetails, setIpdetails] = useState();
   const [vpnStatus, setVpnStatus] = useState('disconnected');
   const [loading, setLoading] = useState(false);
+
+
 
   // Fetch IP details on component mount
   useEffect(() => {
