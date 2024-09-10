@@ -36,3 +36,15 @@
     cursor: pointer;
     transition: border-color 0.25s;
 }
+
+.connectivity-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* justify-content: center; */
+}
+
+.connectivity-section>* {
+    padding: 10px;
+}
