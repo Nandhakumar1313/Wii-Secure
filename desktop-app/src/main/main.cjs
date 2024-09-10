@@ -5,12 +5,22 @@ const path = require('path');
 const sudo = require('sudo-prompt');
 const { exec } = require('child_process');
 
+function getResourcePath(subPath) {
+    if (app.isPackaged) {
+
+        return path.join(process.resourcesPath, subPath);
+    } else {
+
+        return path.join(__dirname, '..', '..', subPath);
+    }
+}
+
 let mainwindow
 function startVPN() {
     console.log("starting")
 
-    const openvpnBinary = path.join(__dirname, '..', '..', 'openvpn', 'win32', 'openvpn.exe');
-    const configFilePath = path.join(__dirname, '..', '..', 'openvpn', 'vpn_config', 'config-user234.ovpn');
+    const openvpnBinary = getResourcePath('openvpn/win32/openvpn.exe');
+    const configFilePath = getResourcePath('openvpn/vpn_config/config-user234.ovpn');
     const command = `"${openvpnBinary}" --config "${configFilePath}"`;
 
     sudo.exec(command, { name: 'OpenVPN Connection' }, (error, stdout, stderr) => {
@@ -49,9 +59,12 @@ function createWindow() {
         },
     });
 
-
-
-    mainWindow.loadURL('http://localhost:5173');
+    if (app.isPackaged) {
+        const indexPath = path.join(__dirname, '..', '..', 'dist', 'index.html');
+        mainWindow.loadFile(indexPath);
+    } else {
+        mainWindow.loadURL('http://localhost:5173');
+    }
 
 }
 
