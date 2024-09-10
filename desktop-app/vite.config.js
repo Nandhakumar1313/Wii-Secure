@@ -9,6 +9,7 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'), // Shorten imports using '@' for `src/`
     },
   },
+  base: './', // Ensures assets are linked with relative paths in production
   build: {
     outDir: 'dist', // Output directory for Vite build
     rollupOptions: {
