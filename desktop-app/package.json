@@ -42,6 +42,15 @@
       "dist/",
       "src/",
       "openvpn/"
+    ],
+    "extraResources": [
+      {
+        "from": "openvpn/",
+        "to": "openvpn/",
+        "filter": [
+          "**/*"
+        ]
+      }
     ]
   }
 }
