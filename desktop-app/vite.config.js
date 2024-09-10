@@ -6,18 +6,24 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'), // Easier imports using '@' for `src/`
+      '@': resolve(__dirname, 'src'), // Shorten imports using '@' for `src/`
     },
   },
   build: {
-    outDir: 'dist', // Output directory for the build
+    outDir: 'dist', // Output directory for Vite build
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'), // React entry point
+        main: resolve(__dirname, 'index.html'), // Entry point for Vite build
+      },
+      external: ['electron'], // Mark electron as an external dependency
+      output: {
+        globals: {
+          electron: 'electron', // Ensure electron APIs are accessible globally
+        },
       },
     },
   },
   server: {
-    port: 5173, // Adjust the port if needed
+    port: 5173, // Development server port
   },
 });

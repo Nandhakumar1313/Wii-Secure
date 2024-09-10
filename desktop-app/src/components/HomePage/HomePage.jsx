@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './HomePage.css';
 
+
 function HomePage() {
   const [ipdetails, setIpdetails] = useState();
   const [vpnStatus, setVpnStatus] = useState('disconnected');
   const [loading, setLoading] = useState(false);
+
+
 
   // Fetch IP details on component mount
   useEffect(() => {
@@ -28,6 +31,8 @@ function HomePage() {
     try {
       await window.vpnAPI.controlVPN('start');
       setVpnStatus('connected');
+      
+
     } catch (error) {
       console.error('Error connecting VPN:', error);
     } finally {
@@ -42,6 +47,7 @@ function HomePage() {
     try {
       await window.vpnAPI.controlVPN('stop');
       setVpnStatus('disconnected');
+      
     } catch (error) {
       console.error('Error disconnecting VPN:', error);
     } finally {
@@ -64,7 +70,13 @@ function HomePage() {
         )}
 
         <div className="vpn-controls">
-          {vpnStatus === 'disconnected' ? (
+        <button onClick={handleVpnConnect} disabled={loading}>
+              {loading ? 'Connecting...' : 'Connect VPN'}
+            </button>
+            <button onClick={handleVpnDisconnect} disabled={loading}>
+              {loading ? 'Disconnecting...' : 'Disconnect VPN'}
+            </button>
+          {/* {vpnStatus === 'disconnected' ? (
             <button onClick={handleVpnConnect} disabled={loading}>
               {loading ? 'Connecting...' : 'Connect VPN'}
             </button>
@@ -72,7 +84,7 @@ function HomePage() {
             <button onClick={handleVpnDisconnect} disabled={loading}>
               {loading ? 'Disconnecting...' : 'Disconnect VPN'}
             </button>
-          )}
+          )} */}
           <p>Status: {vpnStatus === 'connected' ? 'Connected' : 'Disconnected'}</p>
         </div>
       </div>
