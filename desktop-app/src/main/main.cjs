@@ -76,7 +76,7 @@ function createWindow() {
             .catch(err => console.error(`Error loading URL: ${err.message}`)); // Catch load errors
     }
 
-    ainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.on('did-finish-load', () => {
         console.log('Main window content fully loaded');
     });
 
