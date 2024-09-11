@@ -16,6 +16,7 @@ function getResourcePath(subPath) {
 }
 
 let mainwindow
+let devProcess
 function startVPN() {
     console.log("starting")
 
@@ -47,7 +48,19 @@ function stopVPN() {
         }
     });
 }
-
+function startdevProcess() {
+    // Start the Vite development server using "npm run dev"
+    devProcess = exec('npm run preview', (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error executing npm run dev: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.error(`stderr: ${stderr}`);
+        }
+        console.log(`stdout: ${stdout}`);
+    });
+}
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 800,
@@ -68,13 +81,15 @@ function createWindow() {
     if (app.isPackaged) {
         // Production: Load the index.html from the dist folder (relative to the executable location)
         // const indexPath = path.join(__dirname, '..', '..', 'dist', 'index.html');
-        const indexPath = path.join(process.resourcesPath, 'app.asar', 'dist', 'index.html');
-        console.log(`Loading production HTML from: ${indexPath}`);
-        mainWindow.loadURL('http://localhost:5173').catch(err => console.error(`Error loading URL: ${err.message}`));
+
+        startdevProcess()
+
+        mainWindow.loadURL('http://localhost:4173').catch(err => console.error(`Error loading URL: ${err.message}`));
     } else {
         // Development: Load from Vite server
-        console.log('Loading development server at http://localhost:5173');
-        mainWindow.loadURL('http://localhost:5173').catch(err => console.error(`Error loading URL: ${err.message}`));
+        startdevProcess()
+        console.log('Loading development server at http://localhost:4173');
+        mainWindow.loadURL('http://localhost:4173').catch(err => console.error(`Error loading URL: ${err.message}`));
     }
 
     mainWindow.webContents.on('did-finish-load', () => {
@@ -117,6 +132,9 @@ app.whenReady().then(createWindow)
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
+    }
+    if (devProcess) {
+        devProcess.kill();
     }
 });
 
