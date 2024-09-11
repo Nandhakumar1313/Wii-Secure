@@ -66,14 +66,14 @@ function createWindow() {
     });
 
     if (app.isPackaged) {
+        // Production: Load the index.html from the dist folder (relative to the executable location)
         const indexPath = path.join(__dirname, '..', '..', 'dist', 'index.html');
-        console.log(`Loading production HTML from: ${indexPath}`); // Log the path
-        mainWindow.loadFile(indexPath)
-            .catch(err => console.error(`Error loading file: ${err.message}`)); // Catch load errors
+        console.log(`Loading production HTML from: ${indexPath}`);
+        mainWindow.loadFile(indexPath).catch(err => console.error(`Error loading file: ${err.message}`));
     } else {
+        // Development: Load from Vite server
         console.log('Loading development server at http://localhost:5173');
-        mainWindow.loadURL('http://localhost:5173')
-            .catch(err => console.error(`Error loading URL: ${err.message}`)); // Catch load errors
+        mainWindow.loadURL('http://localhost:5173').catch(err => console.error(`Error loading URL: ${err.message}`));
     }
 
     mainWindow.webContents.on('did-finish-load', () => {
@@ -104,6 +104,11 @@ ipcMain.on('vpn-control', (event, action) => {
     }
 });
 
+
+ipcMain.on('get-dirname', (event) => {
+    const dirname = __dirname;
+    event.returnValue = dirname;  // Send the dirname as a synchronous response
+});
 
 
 app.whenReady().then(createWindow)
