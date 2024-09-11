@@ -1,0 +1,16 @@
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-btn>* {
+    margin-right: 10px;
+}
