@@ -16,6 +16,7 @@ function getResourcePath(subPath) {
 }
 
 let mainwindow
+let devProcess
 function startVPN() {
     console.log("starting")
 
@@ -47,7 +48,19 @@ function stopVPN() {
         }
     });
 }
-
+function startdevProcess() {
+    // Start the Vite development server using "npm run dev"
+    devProcess = exec('npm run preview', (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error executing npm run dev: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.error(`stderr: ${stderr}`);
+        }
+        console.log(`stdout: ${stdout}`);
+    });
+}
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 800,
@@ -66,17 +79,20 @@ function createWindow() {
     });
 
     if (app.isPackaged) {
-        const indexPath = path.join(__dirname, '..', '..', 'dist', 'index.html');
-        console.log(`Loading production HTML from: ${indexPath}`); // Log the path
-        mainWindow.loadFile(indexPath)
-            .catch(err => console.error(`Error loading file: ${err.message}`)); // Catch load errors
+        // Production: Load the index.html from the dist folder (relative to the executable location)
+        // const indexPath = path.join(__dirname, '..', '..', 'dist', 'index.html');
+
+        startdevProcess()
+
+        mainWindow.loadURL('http://localhost:4173').catch(err => console.error(`Error loading URL: ${err.message}`));
     } else {
-        console.log('Loading development server at http://localhost:5173');
-        mainWindow.loadURL('http://localhost:5173')
-            .catch(err => console.error(`Error loading URL: ${err.message}`)); // Catch load errors
+        // Development: Load from Vite server
+        startdevProcess()
+        console.log('Loading development server at http://localhost:4173');
+        mainWindow.loadURL('http://localhost:4173').catch(err => console.error(`Error loading URL: ${err.message}`));
     }
 
-    ainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.on('did-finish-load', () => {
         console.log('Main window content fully loaded');
     });
 
@@ -105,12 +121,20 @@ ipcMain.on('vpn-control', (event, action) => {
 });
 
 
+ipcMain.on('get-dirname', (event) => {
+    const dirname = __dirname;
+    event.returnValue = dirname;  // Send the dirname as a synchronous response
+});
+
 
 app.whenReady().then(createWindow)
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
+    }
+    if (devProcess) {
+        devProcess.kill();
     }
 });
 
