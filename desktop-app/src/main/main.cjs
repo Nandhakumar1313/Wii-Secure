@@ -50,7 +50,7 @@ function stopVPN() {
 }
 function startdevProcess() {
     // Start the Vite development server using "npm run dev"
-    devProcess = exec('npm run preview', (error, stdout, stderr) => {
+    devProcess = exec('python -m http.server 4173', (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing npm run dev: ${error.message}`);
             return;
@@ -102,6 +102,12 @@ function createWindow() {
     });
 
 }
+
+app.on('before-quit', () => {
+    if (mainWindow) {
+        mainWindow.webContents.executeJavaScript('localStorage.removeItem("originalIp")');
+    }
+});
 
 ipcMain.on('reload-app', (event) => {
     console.log('Received reload-app event');
