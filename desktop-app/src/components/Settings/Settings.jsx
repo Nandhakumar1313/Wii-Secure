@@ -1,41 +1,33 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-function Settings() {
+function Settings({ vpnConnected, checkVPNConnectivity }) {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkVPN = async () => {
+      try {
+        await checkVPNConnectivity();
+      } catch (error) {
+        console.error('Error checking VPN connectivity:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkVPN();
+  }, [checkVPNConnectivity]);
+
+  if (loading) {
+    return <div className="content-container">Loading...</div>;
+  }
+
   return (
     <div className="content-container">
-    
-          <div className="container-title">Settings</div>
-     </div>
-  )
+      <h2>VPN Status: {vpnConnected ? 'Connected' : 'Not Connected'}</h2>
+      <div className="container-title">Settings</div>
+    </div>
+  );
 }
 
-export default Settings
-
-// import React, { useEffect, useState } from 'react'
-// import { IoMdSettings } from "react-icons/io";
-// import axios from "axios"
-// function Settings() {
-// const [res,setRes] = useState()
-//   useEffect(()=>{
-//     const fetchresult = async()=>{
-//       try{
-//         const conn = await axios.get('http://127.0.0.1:5000')
-//       setRes(conn.data)
-//       }
-//       catch(err){
-//         console.error(err)
-//       }
-//     }
-//     fetchresult()
-//   },[])
-
-//   console.log(res.sample)
-//   return (
-//     <div className="content-container">
-//         {/* {res?'loading':<h3>{res.sample}</h3>} */}
-//         <div className="container-title">Settings</div>
-//     </div>
-//   )
-// }
-
-// export default Settings
+export default Settings;
